@@ -1,0 +1,139 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Despesas-Api</title>
+</head>
+<body>
+    <h1>Despesas - Documentação</h1>
+    <section>
+        <h2>Tabelas</h2>
+        <p>
+            <h3>transactions</h3>
+            <p>Movimentações financeiras de débito ou crédito</p>
+            <p><strong>Campos:</strong></p>
+            <p>
+                <b>id:</b>          number;<br>
+                <b>amount:</b>      number;<br>
+                <b>description:</b> string;<br>
+                <b>data:</b>        Date;<br>
+                <b>category:</b>    number;<br>
+                <b>account:</b>     number;<br>
+            </p>
+                
+            <h3>Categories</h3>
+            <p>Classificação das movimentações financeiras</p>
+            <p><strong>Campos:</strong></p>
+            <p>
+                <b>id:</b>          number;<br>
+                <b>description:</b> string;<br>
+                <b>type:</b>        string;<br>
+            </p>
+
+            <h3>Accounts</h3>
+            <p>Contas (bancarias ou não) onde acontecem as movimentações</p>
+            <p><strong>Campos:</strong></p>
+            <p>
+                <b>id:</b>          number;<br>
+                <b>description:</b> string;<br>
+            </p>
+        </p>
+    </section>
+    <section>
+        <p>
+            <h2>Métodos</h2>
+            <ul>
+                <li>GET<a href="http://localhost:3001/criar-tabelas">/criar-tabelas</a></li>
+                <p>Método para criar as tabelas. Caso exista a tabela é ignorada</p>
+                <li>GET<a href="http://localhost:3001/movimentacoes">/movimentacoes</a></li>
+                <p>Retorna um objeto .json com todas as movimentações. Para selecionar um registro específico 
+                    deve-se usar a query "?id=[número do id]"
+                </p>
+
+                <li>PUT<a href="http://localhost:3001/movimentacoes">/movimentacoes</a></li>
+                <p>Insere uma movimentação. Este método recebe um objeto json no corpo da requisição no seguinte formato: <br>
+                    {<br>
+                        "description": "Teste 3",<br>
+                        "data": "2025-02-25",<br>
+                        "amount": 53.32,<br>
+                        "category": 3,<br>
+                        "account": 1<br>
+
+                    }
+                </p>                
+                <li>PATH<a href="http://localhost:3001/movimentacoes">/movimentacoes</a></li>
+                <p>Altera um ou mais campos de uma movimentação exceto o id. Este método recebe um objeto 
+                    json no corpo da requisição no seguinte formato: <br>
+                    {<br>
+                        "id": 1, <br>
+                        "description": "Teste 3",<br>
+                        "data": "2025-02-25", <br>
+                        "amount": 53.32,<br>
+                        "category": 3,<br>
+                        "account": 1<br>
+
+                    }                
+                <li>DELETE<a href="http://localhost:3001/movimentacoes">/movimentacoes</a></li>
+                <p>Deleta uma movimentação. Este método recebe um objeto 
+                    json no corpo da requisição no seguinte formato: <br>
+                    {<br>
+                        "id": 1, <br>
+                    }               
+                    
+                    
+                <li>GET<a href="http://localhost:3001/categorias">/categorias</a></li>
+                <p>Retorna um objeto .json com todas as categorias. Para selecionar um registro específico 
+                    deve-se usar a query "?id=[número do id]"
+                </p>                
+                <li>PUT<a href="http://localhost:3001/categorias">/categorias</a></li>
+                <p>Insere uma categoria. Este método recebe um objeto json no corpo da requisição no seguinte formato: <br>
+                    {<br>
+                        "description": "Aluguel",<br>
+                        "type": "D" ( "D" = Débito, "C" = Crédito )
+                    }                
+
+                <li>PATH<a href="http://localhost:3001/categorias">/categorias</a></li>
+                <p>Altera um ou mais campos de uma categoria exceto o id. Este método recebe um objeto 
+                    json no corpo da requisição no seguinte formato: <br>
+                    {<br>
+                        "id": 1, <br>
+                        "description": "Teste 3",<br>
+                        "type": "C"
+                    }                                
+
+                <li>DELETE<a href="http://localhost:3001/categorias">/categorias</a></li>
+                <p>Deleta uma categoria. Este método recebe um objeto 
+                    json no corpo da requisição no seguinte formato: <br>
+                    {<br>
+                        "id": 1, <br>
+                    }                   
+                    
+                    
+                <li>GET<a href="http://localhost:3001/contas">/contas</a></li>
+                <p>Retorna um objeto .json com todas as contas. Para selecionar um registro específico 
+                    deve-se usar a query "?id=[número do id]"
+                </p>                
+                <li>PUT<a href="http://localhost:3001/contas">/contas</a></li>
+                <p>Insere uma conta. Este método recebe um objeto json no corpo da requisição no seguinte formato: <br>
+                    {<br>
+                        "description": "Bradesco",<br>
+                    }                                
+                <li>PATH<a href="http://localhost:3001/contas">/contas</a></li>
+                <p>Altera um ou mais campos de uma conta exceto o id. Este método recebe um objeto 
+                    json no corpo da requisição no seguinte formato: <br>
+                    {<br>
+                        "id": 1, <br>
+                        "description": "Itau",<br>
+                    }                                                
+                <li>DELETE<a href="http://localhost:3001/contas">/contas</a></li>
+                <p>Deleta uma conta. Este método recebe um objeto 
+                    json no corpo da requisição no seguinte formato: <br>
+                    {<br>
+                        "id": 1, <br>
+                    }                                   
+            </ul>
+        </p>
+    </section>    
+</body>
+</html>

@@ -1,0 +1,27 @@
+
+
+services:
+  # Serviço do Node.js
+  app:
+    build: .
+    container_name: node_app_despesas-backend
+    ports:
+      - "3001:3001"  # Mapeando a porta 3000 do container para a porta 3000 da máquina
+    volumes:
+      - .:/app  # Sincronizando o código entre o container e a máquina
+
+  db:
+    image: postgres:13  # Usando a imagem oficial do PostgreSQL
+    container_name: postgres_db
+    environment:
+      POSTGRES_USER: nuno
+      POSTGRES_PASSWORD: hpc00
+      POSTGRES_DB: despesas
+    ports:
+      - "5432:5432"  # Expondo a porta 5432 do PostgreSQL
+    volumes:
+      - postgres_data:/var/lib/postgresql/data  # Persistência de dados
+
+# Volume para persistir os dados do PostgreSQL
+volumes:
+  postgres_data:
