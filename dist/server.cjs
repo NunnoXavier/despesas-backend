@@ -414,9 +414,12 @@ router.patch("/contas", async (req, res) => {
 var routes_default = router;
 
 // src/loggerMiddleware.ts
+var allowedOrigins = ["http://localhost:5173", "http://localhost:3000"];
 var loggerMiddleware = (req, res, next) => {
-  res.setHeader("Access-Control-Allow-Origin", "http://localhost:5173");
-  res.setHeader("Access-Control-Allow-Origin", "http://localhost:3000");
+  const origin = req.headers.origin;
+  if (origin && allowedOrigins.includes(origin)) {
+    res.setHeader("Access-Control-Allow-Origin", origin);
+  }
   res.setHeader("Access-Control-Allow-Methods", "GET,POST,PUT,DELETE,OPTIONS");
   res.setHeader("Access-Control-Allow-Headers", "Content-Type, Authorization");
   next();
