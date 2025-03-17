@@ -51,12 +51,7 @@ var query = async (command) => {
     return result.rows;
   } catch (error) {
     console.log(error);
-    throw [
-      {
-        erro: error,
-        sql: str
-      }
-    ];
+    throw { erro: error, sql: str };
   }
 };
 var postgresql_default = query;
@@ -421,6 +416,7 @@ var routes_default = router;
 // src/loggerMiddleware.ts
 var loggerMiddleware = (req, res, next) => {
   res.setHeader("Access-Control-Allow-Origin", "http://localhost:5173");
+  res.setHeader("Access-Control-Allow-Origin", "http://localhost:3000");
   res.setHeader("Access-Control-Allow-Methods", "GET,POST,PUT,DELETE,OPTIONS");
   res.setHeader("Access-Control-Allow-Headers", "Content-Type, Authorization");
   next();
@@ -429,7 +425,7 @@ var loggerMiddleware_default = loggerMiddleware;
 
 // src/server.ts
 var app = (0, import_express2.default)();
-var port = 3001;
+var port = process.env.PORT || 3001;
 app.use(loggerMiddleware_default);
 app.use(import_express2.default.json());
 app.use(import_express2.default.urlencoded({ extended: false }));

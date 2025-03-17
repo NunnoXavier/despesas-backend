@@ -57,12 +57,7 @@ var query = async (command) => {
     return result.rows;
   } catch (error) {
     console.log(error);
-    throw [
-      {
-        erro: error,
-        sql: str
-      }
-    ];
+    throw { erro: error, sql: str };
   }
 };
 var postgresql_default = query;

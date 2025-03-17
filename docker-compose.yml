@@ -2,11 +2,13 @@
 
 services:
   # Serviço do Node.js
-  app:
+  backend:
     build: .
     container_name: node_app_despesas-backend
     ports:
       - "3001:3001"  # Mapeando a porta 3000 do container para a porta 3000 da máquina
+    networks:
+      - minha_rede
     volumes:
       - .:/app  # Sincronizando o código entre o container e a máquina
 
@@ -19,9 +21,15 @@ services:
       POSTGRES_DB: despesas
     ports:
       - "5432:5432"  # Expondo a porta 5432 do PostgreSQL
+    networks:
+      - minha_rede      
     volumes:
       - postgres_data:/var/lib/postgresql/data  # Persistência de dados
 
 # Volume para persistir os dados do PostgreSQL
 volumes:
   postgres_data:
+
+networks:
+  minha_rede:
+    driver: bridge
