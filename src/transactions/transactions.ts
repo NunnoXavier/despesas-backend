@@ -46,7 +46,7 @@ const obterTransacoes = async( id?: number ) => {
     try {
         const whereClause = id? `where id =  ${ id.toString()}` : `` 
         const result = await query(`SELECT * FROM transactions ${ whereClause}`)
-        return result
+        return result.rows
     } catch (error) {
         throw [
             error
@@ -58,7 +58,7 @@ const obterCategorias = async( id?: number ) => {
     try {
         const whereClause = id? `where id =  ${ id.toString()}` : `` 
         const result = await query(`SELECT * FROM categories ${ whereClause }`)
-        return result
+        return result.rows
     } catch (error) {
         throw [
             error
@@ -70,7 +70,7 @@ const obterContas = async( id?: number) => {
     try {
         const whereClause = id? `where id =  ${ id.toString()}` : `` 
         const result = await query(`SELECT * FROM accounts ${ whereClause }`)
-        return result
+        return result.rows
     } catch (error) {
         throw [
             error
@@ -80,7 +80,7 @@ const obterContas = async( id?: number) => {
 
 const inserirTransacao = async( mov: Transaction ) => {
     try {
-        await query(`INSERT INTO transactions(
+        const res = await query(`INSERT INTO transactions(
             data, amount, description, idcategory, idaccount)
             values(
                 "${ useDate.parse(mov.data) }", 
@@ -88,9 +88,8 @@ const inserirTransacao = async( mov: Transaction ) => {
                 "${ mov.description }",
                 ${ mov.idcategory.toString() },
                 ${ mov.idaccount.toString() } 
-            )`)
-            
-        return { sucess: true, reg: mov }                
+            ) RETURNING id`)
+        return { sucess: true, reg: mov, id: res.rows[0].id }                
     } catch (error: any) {
         throw { sucess: false, reg: mov, error: error.message }
     }
@@ -98,9 +97,9 @@ const inserirTransacao = async( mov: Transaction ) => {
 
 const inserirCategoria = async( cat: Category ) => {
     try {
-        await query(`INSERT INTO categories(type, description)
-            values("${ cat.type }", "${ cat.description }")`)
-        return { sucess: true, reg: cat }        
+        const res = await query(`INSERT INTO categories(type, description)
+            values("${ cat.type }", "${ cat.description }") RETURNING id`)
+        return { sucess: true, reg: cat, id: res.rows[0].id }        
     } catch (error) {
         throw { sucess: false, reg: cat, error: error }                
     }
@@ -108,9 +107,9 @@ const inserirCategoria = async( cat: Category ) => {
 
 const inserirConta = async( con: Account ) => {
     try {
-        await query(`INSERT INTO accounts(description)
-            values("${ con.description }")`)            
-            return { sucess: true, reg: con }        
+        const res = await query(`INSERT INTO accounts(description)
+            values("${ con.description }") RETURNING id`)            
+            return { sucess: true, reg: con, id: res.rows[0].id }        
     } catch (error) {
         throw { sucess: false, reg: con, error: error }                            
     }

@@ -10,7 +10,7 @@ pg.types.setTypeParser(23, (val:string) => parseInt(val, 10)); // 23 é o OID pa
 
 const config: PoolConfig ={
     database: 'despesas',
-    host: 'postgres_db',
+    host: 'db',
     user: 'nuno',
     password: 'hpc00',
     port: 5432
@@ -23,8 +23,7 @@ const query = async( command: string ) => {
     const str = command.replaceAll(`"`,`'`)
     try {
         const result:QueryResult<any> = await pool.query(str)
-        console.log(result)
-        return result.rows
+        return result
 
     } catch (error) {
         console.log(error)

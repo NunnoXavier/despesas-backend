@@ -41,7 +41,7 @@ import_pg.default.types.setTypeParser(21, (val) => parseInt(val, 10));
 import_pg.default.types.setTypeParser(23, (val) => parseInt(val, 10));
 var config = {
   database: "despesas",
-  host: "postgres_db",
+  host: "db",
   user: "nuno",
   password: "hpc00",
   port: 5432
@@ -51,8 +51,7 @@ var query = async (command) => {
   const str = command.replaceAll(`"`, `'`);
   try {
     const result = await pool.query(str);
-    console.log(result);
-    return result.rows;
+    return result;
   } catch (error) {
     console.log(error);
     throw { erro: error, sql: str };

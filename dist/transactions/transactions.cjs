@@ -43,7 +43,7 @@ import_pg.default.types.setTypeParser(21, (val) => parseInt(val, 10));
 import_pg.default.types.setTypeParser(23, (val) => parseInt(val, 10));
 var config = {
   database: "despesas",
-  host: "postgres_db",
+  host: "db",
   user: "nuno",
   password: "hpc00",
   port: 5432
@@ -53,8 +53,7 @@ var query = async (command) => {
   const str = command.replaceAll(`"`, `'`);
   try {
     const result = await pool.query(str);
-    console.log(result);
-    return result.rows;
+    return result;
   } catch (error) {
     console.log(error);
     throw { erro: error, sql: str };
@@ -139,7 +138,7 @@ var obterTransacoes = async (id) => {
   try {
     const whereClause = id ? `where id =  ${id.toString()}` : ``;
     const result = await postgresql_default(`SELECT * FROM transactions ${whereClause}`);
-    return result;
+    return result.rows;
   } catch (error) {
     throw [
       error
@@ -150,7 +149,7 @@ var obterCategorias = async (id) => {
   try {
     const whereClause = id ? `where id =  ${id.toString()}` : ``;
     const result = await postgresql_default(`SELECT * FROM categories ${whereClause}`);
-    return result;
+    return result.rows;
   } catch (error) {
     throw [
       error
@@ -161,7 +160,7 @@ var obterContas = async (id) => {
   try {
     const whereClause = id ? `where id =  ${id.toString()}` : ``;
     const result = await postgresql_default(`SELECT * FROM accounts ${whereClause}`);
-    return result;
+    return result.rows;
   } catch (error) {
     throw [
       error
@@ -170,7 +169,7 @@ var obterContas = async (id) => {
 };
 var inserirTransacao = async (mov) => {
   try {
-    await postgresql_default(`INSERT INTO transactions(
+    const res = await postgresql_default(`INSERT INTO transactions(
             data, amount, description, idcategory, idaccount)
             values(
                 "${useDate_default.parse(mov.data)}", 
@@ -178,26 +177,26 @@ var inserirTransacao = async (mov) => {
                 "${mov.description}",
                 ${mov.idcategory.toString()},
                 ${mov.idaccount.toString()} 
-            )`);
-    return { sucess: true, reg: mov };
+            ) RETURNING id`);
+    return { sucess: true, reg: mov, id: res.rows[0].id };
   } catch (error) {
     throw { sucess: false, reg: mov, error: error.message };
   }
 };
 var inserirCategoria = async (cat) => {
   try {
-    await postgresql_default(`INSERT INTO categories(type, description)
-            values("${cat.type}", "${cat.description}")`);
-    return { sucess: true, reg: cat };
+    const res = await postgresql_default(`INSERT INTO categories(type, description)
+            values("${cat.type}", "${cat.description}") RETURNING id`);
+    return { sucess: true, reg: cat, id: res.rows[0].id };
   } catch (error) {
     throw { sucess: false, reg: cat, error };
   }
 };
 var inserirConta = async (con) => {
   try {
-    await postgresql_default(`INSERT INTO accounts(description)
-            values("${con.description}")`);
-    return { sucess: true, reg: con };
+    const res = await postgresql_default(`INSERT INTO accounts(description)
+            values("${con.description}") RETURNING id`);
+    return { sucess: true, reg: con, id: res.rows[0].id };
   } catch (error) {
     throw { sucess: false, reg: con, error };
   }
